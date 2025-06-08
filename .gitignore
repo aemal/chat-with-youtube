@@ -234,4 +234,13 @@ api-keys.txt
 *.zip
 *.tar.gz
 *.rar
-*.7z 
+*.7z
+
+# Added by Claude Task Master
+dev-debug.log
+# Environment variables
+.vscode
+# OS specific
+# Task files
+tasks.json
+tasks/ 
