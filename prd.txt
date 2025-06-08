@@ -1,0 +1,153 @@
+# Product Requirements Document (PRD)
+
+## Project Title: Chat with YouTube
+
+### Overview
+
+Chat with YouTube is a simple, full-stack application that allows users to interact with the content of any YouTube video by pasting a link, extracting its transcript, and chatting with a GPT-powered assistant that responds contextually based on the transcript content. The UI is modern, clean, and responsive using HeroUI (formerly NextUI).
+
+---
+
+## Goals
+
+* Enable users to chat with any YouTube video using its transcript.
+* Provide an intuitive and fast UI for entering YouTube URLs.
+* Display a playable YouTube video embed.
+* Retrieve and process YouTube transcripts.
+* Integrate with OpenAI’s GPT-4-turbo-mini for contextual chat.
+* Maintain a persistent chat history per session.
+* Display loaders during API requests.
+
+---
+
+## Functional Requirements
+
+### Core Features (MVP)
+
+#### 1. YouTube URL Input
+
+* A text input field where users paste the YouTube video URL.
+* Button to trigger transcript extraction and video loading.
+
+#### 2. Transcript Retrieval
+
+* Uses `youtube-captions-scraper` npm package.
+* Extracts English (`lang: 'en'`) captions from the video.
+* Stores transcript in memory for that session.
+
+#### 3. YouTube Embed
+
+* Embeds the actual video player below the input box using the YouTube IFrame API.
+* The video should autoplay if transcript loads successfully.
+
+#### 4. Chat Interface
+
+* Input field for user queries.
+* Display chat history with user messages and GPT replies.
+* The initial system message includes the full video transcript.
+* Every new message appends to the chat history and sends the full conversation to OpenAI.
+
+#### 5. Loader Animations
+
+* Show loading spinners while fetching transcripts.
+* Show a typing indicator while waiting for GPT response.
+
+### Optional / Future Features
+
+#### 6. Streaming Chat (Low Priority)
+
+* Replace full-response waits with streaming response using OpenAI's streaming API.
+* Implement UI to render incoming text incrementally.
+
+---
+
+## Technical Requirements
+
+### Tech Stack
+
+* **Frontend**: Next.js 15.3.3 (App Router)
+* **Language**: TypeScript
+* **Styling**: Tailwind CSS with HeroUI
+* **AI Integration**: OpenAI GPT-4-turbo-mini
+* **Transcript Extraction**: `youtube-captions-scraper`
+
+### Environment Variables
+
+```env
+# .env.local
+OPENAI_API_KEY=your_api_key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### NPM Dependencies
+
+* `openai`
+* `youtube-captions-scraper`
+* `@heroui/react`
+* `react`, `next`, `tailwindcss`
+
+---
+
+## User Flow
+
+1. User opens the app and pastes a YouTube URL.
+2. App extracts the video ID and fetches the transcript.
+3. If successful, the video player appears and transcript is saved.
+4. User asks a question; app sends the chat history + transcript as system prompt.
+5. GPT response is shown in the chat UI.
+6. Loading and typing indicators show while waiting.
+
+---
+
+## UX/UI Requirements
+
+* Use HeroUI components (Cards, Input, Button, Spinner, etc.)
+* Chat interface should mimic modern chat apps (Bubble style, timestamps optional).
+* Responsive layout for desktop and mobile.
+* Error messages for:
+
+  * No transcript available
+  * Failed to load video
+  * GPT API error
+
+---
+
+## File & Folder Structure (Key Files)
+
+```
+/app
+  /api
+    /chat -> Handles GPT calls
+    /transcript -> Handles transcript fetching
+  /components
+    ChatInterface.tsx
+    URLInput.tsx
+    TranscriptDisplay.tsx
+  layout.tsx
+  page.tsx
+/lib
+  openai.ts
+  youtube.ts
+/types
+  index.ts
+```
+
+---
+
+## Acceptance Criteria (MVP)
+
+* I should see an input text box
+* I should see the video embed when I paste youtube URL
+* I should see a chat window on the right side of the screen
+* I should be able to chat with the transcript of the youtube video by using ChatGPT
+* I should see the chat history
+
+---
+
+## Contributors
+
+* \[Your Name / GitHub Handle]
+
+## License
+
+MIT
